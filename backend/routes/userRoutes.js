@@ -6,8 +6,8 @@ import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/users/:username' , authMiddleware , getUser );
+router.get('/:username' , authMiddleware , getUser );
 
-router.patch('/users/follow' , authMiddleware , toggleFollow);
+router.patch('/follow' , authMiddleware , toggleFollow);
 
 export { router };

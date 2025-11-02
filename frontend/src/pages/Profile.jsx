@@ -52,7 +52,7 @@ export default function Profile() {
   const isFollowing = profile.followers.some(f => f.username === username);
 
   return (
-    <div className="min-h-screen bg-[#14181C] text-gray-200 px-6 py-10 max-w-5xl mx-auto">
+    <div className="min-h-screen bg-[#14181C] text-gray-200 flex flex-col items-center justify-start py-12 px-4 md:px-10">
       {/* Header */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
         <div className="flex flex-col md:flex-row items-center gap-4">

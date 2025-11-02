@@ -32,13 +32,13 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use('/api', authRouter);
+app.use('/api/auth', authRouter);
 
-app.use('/api',  userRouter);
+app.use('/api/users',  userRouter);
 
-app.use('/api',  postRouter);
+app.use('/api/posts',  postRouter);
 
-app.use('/api' , gameRouter);
+app.use('/api/game' , gameRouter);
 
 app.get("/", (req, res) => res.send("Server is running"));
 

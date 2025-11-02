@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     followers: [{ username: { type: String, required: true } }],
     following: [{ username: { type: String, required: true } }],
     level: { type: Number, default: 1 },        
-    gameScore: { type: Number, default: 0 },    
+    points: { type: Number, default: 0 },    
   },
   { timestamps: true }
 );

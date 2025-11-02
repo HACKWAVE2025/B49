@@ -1,72 +1,62 @@
 import { create } from "zustand";
-import { updateGameScore, getLeaderboard } from "../utils/gameApi.js";
+import { updateGameScore, getLeaderboard } from "../utils/gameApi";
+import { getProfile } from "../utils/userApi";
+import { updateUserPoints } from "../utils/gameApi";
+
+// ✅ API call to update points
 
 export const useGameStore = create((set, get) => ({
-  // --- UI state ---
+  currentLevel: 0,
+  points: 0,
+  questionsAnswered: 0,
   showQuiz: false,
   currentQuestion: null,
   gameRunning: true,
-
-  // --- Player stats ---
-  score: 0,
-  level: 1,
-  progress: 0, // progress toward next level (0–100)
-
-  // --- Leaderboard ---
   leaderboard: [],
   loading: false,
 
-  // === UI Handlers ===
+  // ⚙️ Setters
+  setCurrentLevel: (level) => set({ currentLevel: level }),
+  setQuestionsAnswered: (count) => set({ questionsAnswered: count }),
   setShowQuiz: (val) => set({ showQuiz: val }),
   setCurrentQuestion: (q) => set({ currentQuestion: q }),
   setGameRunning: (val) => set({ gameRunning: val }),
 
-  // === Game Logic ===
-  increaseScore: async (points = 0) => {
-    if (!points) return;
-    // Update local optimistically
-    set((state) => {
-      const newScore = state.score + points;
-      const progress = newScore % 100;
-      const level = state.level + (newScore >= state.level * 100 ? 1 : 0);
-      return { score: newScore, progress, level };
-    });
-
+  // 🧠 Fetch player details (level, points)
+  fetchPlayerDetails: async () => {
     try {
-      await updateGameScore(points);
-    } catch (error) {
-      console.error("Error updating score on server:", error);
-      // Optionally refetch leaderboard or user state from server here
+      const username = localStorage.getItem("username");
+      if (!username) return;
+
+      const profile = await getProfile(username);
+      if (profile) {
+        set({
+          currentLevel: profile.level || 0,
+          points: profile.points || 0,
+        });
+      }
+    } catch (err) {
+      console.error("❌ Error fetching player details:", err);
     }
   },
 
-  // Reset score locally and on server using existing updateGameScore endpoint
-  resetScore: async () => {
-    const currentScore = get().score;
-    if (!currentScore) {
-      set({ score: 0, progress: 0, level: 1 });
-      return;
-    }
+  // 🧩 Post points update
+  // postPoints: updateUserPoints(userId, pointsToAdd),
 
-    try {
-      // send negative delta to bring server score to zero
-      await updateGameScore(-currentScore);
-      set({ score: 0, progress: 0, level: 1 });
-    } catch (error) {
-      console.error("Error resetting score on server:", error);
-      // still reset locally so UI isn't stuck; you may want to reconcile later
-      set({ score: 0, progress: 0, level: 1 });
-    }
+
+  // 🧱 Post level update (manually if needed)
+  postLevel: (newLevel) => {
+    set({ currentLevel: newLevel });
   },
 
-  // === Leaderboard ===
+  // 🏆 Fetch leaderboard
   fetchLeaderboard: async () => {
     set({ loading: true });
     try {
       const topUsers = await getLeaderboard();
-      set({ leaderboard: topUsers || [] });
-    } catch (error) {
-      console.error("Failed to fetch leaderboard:", error);
+      set({ leaderboard: topUsers });
+    } catch (err) {
+      console.error("❌ Error fetching leaderboard:", err);
     } finally {
       set({ loading: false });
     }

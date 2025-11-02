@@ -15,15 +15,15 @@ import {
 
 const router = express.Router();
 
-router.post('/posts', authMiddleware, createPost);
-router.get('/posts/id/:postId' , authMiddleware , getPost);
-router.patch('/posts/:postId/:likedByUser', authMiddleware, updateLikes);
-router.patch('/posts/:postId/status', authMiddleware, changestatus);
-router.patch('/posts/update/updatepost/:postId', authMiddleware, updatePost);
-router.post('/posts/:postId/comments', authMiddleware, addComment);
-router.delete('/posts/:postId/comments/:commentId', authMiddleware, deleteComment);
-router.delete('/posts/:postId', authMiddleware, deletePost);
-router.get('/posts/:username', authMiddleware, getPosts);
-router.get('/posts/feed/:username' , authMiddleware , getFeed);
+router.post('/', authMiddleware, createPost);
+router.get('/id/:postId' , authMiddleware , getPost);
+router.patch('/:postId/:likedByUser', authMiddleware, updateLikes);
+router.patch('/:postId/status', authMiddleware, changestatus);
+router.patch('/update/updatepost/:postId', authMiddleware, updatePost);
+router.post('/:postId/comments', authMiddleware, addComment);
+router.delete('/:postId/comments/:commentId', authMiddleware, deleteComment);
+router.delete('/:postId', authMiddleware, deletePost);
+router.get('/:username', authMiddleware, getPosts);
+router.get('/feed/:username' , authMiddleware , getFeed);
 
 export { router };

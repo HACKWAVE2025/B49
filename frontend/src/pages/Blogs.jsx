@@ -9,7 +9,6 @@ export default function Blogs() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // if viewing someone else's blogs (e.g. /blogs?user=john)
   const queryParams = new URLSearchParams(location.search);
   const profileOwner = queryParams.get("user") || username;
 
@@ -20,39 +19,38 @@ export default function Blogs() {
       setBlogs(posts.filter((post) => post.isPublic));
     };
     fetchBlogs();
-  }, [profileOwner , location.key]);
+  }, [profileOwner, location.key]);
 
   return (
-    <div className="min-h-screen bg-[#14181C] text-gray-200 px-6 py-10">
-      <h1 className="text-3xl font-bold text-[#00b020] mb-6">
+    <div className="min-h-screen bg-[#0B0F17] text-gray-200 px-6 py-10">
+      <h1 className="text-4xl font-bold text-[#00FF88] mb-10 text-center tracking-wide">
         {profileOwner === username ? "My Blogs" : `${profileOwner}'s Blogs`}
       </h1>
 
-      <div className="grid gap-4 max-w-3xl mx-auto">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
         {blogs.length > 0 ? (
           blogs.map((blog) => (
             <div
               key={blog._id}
-              className="border border-gray-700 rounded-lg p-4 hover:bg-[#1E2328] transition"
+              className="bg-[#121A26] border border-[#1E2A38] rounded-2xl p-6 shadow-md hover:shadow-[0_0_15px_#00FF8855] transition-all duration-300"
             >
               {/* Blog Title */}
               <h2
-                className="text-xl font-semibold text-[#00b020] cursor-pointer hover:underline"
+                className="text-xl font-semibold text-[#00FF88] cursor-pointer hover:text-[#39FF9F] transition"
                 onClick={() => navigate(`/blog/${blog._id}`, { state: { blog } })}
               >
                 {blog.title}
               </h2>
 
               {/* Blog Info */}
-              <div className="flex items-center justify-between mt-2 text-sm text-gray-400">
+              <div className="flex items-center justify-between mt-3 text-sm text-gray-400 border-t border-[#1E2A38] pt-3">
                 <p>{new Date(blog.createdAt).toLocaleDateString()}</p>
 
-                {/* Author */}
                 <button
-                  className="text-[#90C67C] hover:underline"
+                  className="text-[#3DFFB0] hover:underline"
                   onClick={() => navigate(`/profile/${blog.username}`)}
                 >
-                  {blog.username}
+                  @{blog.username}
                 </button>
               </div>
             </div>

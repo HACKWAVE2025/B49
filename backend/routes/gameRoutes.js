@@ -1,13 +1,14 @@
 import express from "express";
-import { updateProgress, getLeaderboard } from "../controllers/gameController.js";
+import { updateProgress, getLeaderboard , updatePoints, updateLevel} from "../controllers/gameController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 
-router.patch("/game/patch/updateprogress", authMiddleware, updateProgress);
+router.patch("/patch/updateprogress", authMiddleware, updateProgress);
+router.post("/update-points", authMiddleware ,updatePoints);
+router.post("/update-level", authMiddleware ,updateLevel);
 
-
-router.get("/game/get/leaderboard", authMiddleware, getLeaderboard);
+router.get("/get/leaderboard", authMiddleware, getLeaderboard);
 
 export { router };
